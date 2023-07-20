@@ -30,7 +30,7 @@ variable "users" {
   type = list(object({
     name     = string
     password = string
-    admin    = bool
+    admin    = optional(bool, false)
   }))
 }
 
