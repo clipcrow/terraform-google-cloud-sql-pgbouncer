@@ -14,6 +14,7 @@ module "pgbouncer_cloud_init" {
   database_port       = 5432
   users               = var.users
   auth_user           = var.auth_user
+  auth_type           = var.auth_type
   auth_query          = var.auth_query
   default_pool_size   = var.default_pool_size
   max_db_connections  = var.max_db_connections
@@ -43,9 +44,9 @@ resource "google_compute_instance" "pgbouncer" {
   }
 
   metadata = {
-    google-logging-enabled = var.disable_service_account ? null : true
+    google-logging-enabled       = var.disable_service_account ? null : true
     google-logging-use-fluentbit = var.disable_service_account ? null : true
-    user-data              = module.pgbouncer_cloud_init.cloud_config
+    user-data                    = module.pgbouncer_cloud_init.cloud_config
   }
 
   boot_disk {

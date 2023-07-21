@@ -1,5 +1,5 @@
 locals {
-  users    = [for u in var.users : ({ name = u.name, password = substr(u.password, 0, 3) == "md5" ? u.password : "md5${md5("${u.password}${u.name}")}" })]
+  users    = [for u in var.users : ({ name = u.name, password = u.password })]
   admins   = [for u in var.users : u.name if lookup(u, "admin", false) == true]
   userlist = templatefile("${path.module}/templates/userlist.txt.tmpl", { users = local.users })
   cloud_config = templatefile(
@@ -9,6 +9,7 @@ locals {
       db_port            = var.database_port
       listen_port        = var.listen_port
       auth_user          = var.auth_user
+      auth_type          = var.auth_type
       auth_query         = var.auth_query
       default_pool_size  = var.default_pool_size
       max_db_connections = var.max_db_connections
