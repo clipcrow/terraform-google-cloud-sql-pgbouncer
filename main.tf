@@ -82,7 +82,7 @@ resource "google_compute_instance" "pgbouncer" {
 
 resource "null_resource" "pgbouncer_updater" {
   triggers = {
-    cloud_config = module.pgbouncer_cloud_init.cloud_config
+    cloud_config = sha256(module.pgbouncer_cloud_init.cloud_config)
   }
   provisioner "local-exec" {
     on_failure = continue
