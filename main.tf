@@ -44,6 +44,7 @@ resource "google_compute_instance" "pgbouncer" {
 
   metadata = {
     google-logging-enabled = var.disable_service_account ? null : true
+    google-logging-use-fluentbit = var.disable_service_account ? null : true
     user-data              = module.pgbouncer_cloud_init.cloud_config
   }
 
@@ -76,11 +77,11 @@ resource "google_compute_instance" "pgbouncer" {
 
 /* Misc --------------------------------------------------------------------- */
 
-# restart instance when users are updated, added or removed
+# restart instance when cloud_config are changed
 
-resource "null_resource" "user_updater" {
+resource "null_resource" "pgbouncer_updater" {
   triggers = {
-    users = join("", [for u in var.users : join("", values(u))])
+    cloud_config = module.pgbouncer_cloud_init.cloud_config
   }
   provisioner "local-exec" {
     on_failure = continue
