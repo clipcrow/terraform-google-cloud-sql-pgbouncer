@@ -15,10 +15,13 @@ write_files:
     content: |
       [Unit]
       Description=Start PgBouncer
+      After=docker.service
+      Requires=docker.service
 
       [Service]
       StandardOutput=file:/var/log/pgbouncer.log
       StandardError=file:/var/log/pgbouncer.log
+      ExecStartPre=/usr/bin/docker rm -f pgbouncer || true
       ExecStart=/usr/bin/docker run \
         --name pgbouncer \
         --restart always \
@@ -27,7 +30,6 @@ write_files:
         -v /run/user/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro \
         ${image}
       ExecStop=/usr/bin/docker stop pgbouncer
-      ExecStopPost=/usr/bin/docker rm pgbouncer
 runcmd:
   - systemctl daemon-reload
   - systemctl start pgbouncer.service
