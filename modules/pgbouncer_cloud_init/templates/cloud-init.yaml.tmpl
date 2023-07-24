@@ -19,12 +19,12 @@ write_files:
       Requires=docker.service
 
       [Service]
+      Restart=on-failure
       StandardOutput=file:/var/log/pgbouncer.log
       StandardError=file:/var/log/pgbouncer.log
       ExecStartPre=/usr/bin/docker rm -f pgbouncer || true
       ExecStart=/usr/bin/docker run \
         --name pgbouncer \
-        --restart always \
         -p ${listen_port}:${listen_port} \
         -v /run/user/userlist.txt:/etc/pgbouncer/userlist.txt:ro \
         -v /run/user/pgbouncer.ini:/etc/pgbouncer/pgbouncer.ini:ro \
