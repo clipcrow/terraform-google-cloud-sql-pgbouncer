@@ -17,3 +17,7 @@ output "port" {
   description = "The port number PgBouncer listens on."
   value       = var.port
 }
+
+output "cloud_config_sha256" {
+  value = sha256(module.pgbouncer_cloud_init.cloud_config)
+}

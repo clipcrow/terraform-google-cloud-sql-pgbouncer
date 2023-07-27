@@ -26,14 +26,12 @@ module "pgbouncer" {
 
   users = [
     { name = "admin", password = "password", admin = true },
-    { name = "user", password = "md55f4dcc3b5aa765d61d8327deb882cf99" }
+    { name = "user", password = "user_password" }
   ]
 }
 ```
 
 ## Authentication
-
-The module accepts both plain-text or pre-hashed md5 passwords as input. Plain-text passwords will be automatically hashed to md5 and their hashed values stored in Terraform's state.
 
 The `users` map accepts an optional `admin` key. When this is set to `true`, the user will be added to the list of PgBouncer admins and stats users.
 
@@ -51,7 +49,7 @@ The `pgbouncer.ini` template used by this module can be found [here](./modules/p
 | name                    | The name of the PgBouncer instance.                                                                                                                                                         | `string` | n/a                      |   yes    |
 | port                    | The port used by PgBouncer to listen on.                                                                                                                                                    | `number` | n/a                      |   yes    |
 | project                 | The ID of the project where PgBouncer will be created.                                                                                                                                      | `string` | n/a                      |   yes    |
-| users                   | The list of users to be created in PgBouncer's userlist.txt. Passwords can be provided as plain-text or md5 hashes.                                                                         | `list`   | n/a                      |   yes    |
+| users                   | The list of users to be created in PgBouncer's userlist.txt.                                                                          | `list`   | n/a                      |   yes    |
 | zone                    | The zone where PgBouncer will be created.                                                                                                                                                   | `string` | n/a                      |   yes    |
 | auth_query              | Query to load user’s password from database.                                                                                                                                                | `string` | `null`                   |    no    |
 | auth_user               | Any user not specified in `users` will be queried through the `auth_query` query from `pg_shadow` in the database, using `auth_user`. The user for `auth_user` must be included in `users`. | `string` | `null`                   |    no    |
