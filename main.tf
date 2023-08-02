@@ -22,11 +22,6 @@ module "pgbouncer_cloud_init" {
   custom_config       = var.pgbouncer_custom_config
 }
 
-data "google_compute_image" "boot" {
-  project = split("/", var.boot_image)[0]
-  family  = split("/", var.boot_image)[1]
-}
-
 resource "google_compute_instance" "pgbouncer" {
   project      = var.project
   name         = var.name
@@ -50,7 +45,7 @@ resource "google_compute_instance" "pgbouncer" {
 
   boot_disk {
     initialize_params {
-      image = data.google_compute_image.boot.self_link
+      image = var.boot_image
     }
   }
 
